@@ -36,10 +36,9 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     && rm -f /lib/systemd/system/systemd-update-utmp*
 
 # UNMINIMIZE
-#RUN yes | unminimize
-RUN apt-get update && apt-get install -y ubuntu-server
+RUN yes | unminimize
 
-RUN apt-get update \
+RUN apt-get update && apt-get install -y ubuntu-server \
     && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
     && apt-get -y upgrade \
     && apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common sudo \
