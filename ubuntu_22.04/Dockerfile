@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-#ENV container docker
 ENV LC_ALL C
 ENV TZ UTC
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,9 +22,8 @@ ENV LC_ALL en_US.utf8
 
 RUN apt-get update \
     && apt-get install -y systemd systemd-sysv && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && cd /lib/systemd/system/sysinit.target.wants/ && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1
-
-RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
+    && cd /lib/systemd/system/sysinit.target.wants/ && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
+    rm -f /lib/systemd/system/multi-user.target.wants/* \
     && rm -f /etc/systemd/system/*.wants/* \
     && rm -f /lib/systemd/system/local-fs.target.wants/* \
     && rm -f /lib/systemd/system/sockets.target.wants/*udev* \
