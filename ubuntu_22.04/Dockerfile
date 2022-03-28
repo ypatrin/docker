@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV container docker
+#ENV container docker
 ENV LC_ALL C
 ENV TZ UTC
 ENV DEBIAN_FRONTEND noninteractive
@@ -36,7 +36,8 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     && rm -f /lib/systemd/system/systemd-update-utmp*
 
 # UNMINIMIZE
-RUN yes | unminimize
+#RUN yes | unminimize
+RUN apt-get update && apt-get install -y ubuntu-server
 
 RUN apt-get update \
     && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
