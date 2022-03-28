@@ -36,13 +36,15 @@ RUN apt-get update \
 # UNMINIMIZE
 RUN yes | unminimize
 
-RUN apt-get update && apt-get install -y ubuntu-server \
+RUN apt-get update && apt-get install -y ubuntu-server landscape-common\
     && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
     && apt-get -y upgrade \
     && apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common sudo \
     && update-ca-certificates \
     && apt-get install -y gcc g++ make autoconf dpkg-dev dpkg pkgconf xdg-utils net-tools curl wget vim nano tar man openssl openssh-server gettext bzip2 tar libtool \
     && systemctl enable ssh
+    
+RUN sh -c 'echo "\nThis service is hosted by ApplicationHubs.\nhttps://applicationhubs.com\n\nIf you have any questions or need help, \nplease contact us at support@applicationhubs.com \n" > /etc/motd'
 
 VOLUME [ "/sys/fs/cgroup" ]
 
