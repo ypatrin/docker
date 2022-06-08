@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:21.10
 #FROM --platform=linux/x86_64 ubuntu:22.04
 
 ENV LC_ALL C
@@ -21,22 +21,16 @@ ENV LANG en_US.utf8
 ENV LANGUAGE en_US.utf8
 ENV LC_ALL en_US.utf8
 
-# UNMINIMIZE
 RUN yes | unminimize
 
-RUN apt-get update && apt-get install -y ubuntu-server landscape-common\
-    && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
+RUN apt-get update && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
     && apt-get -y upgrade \
     && apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common sudo \
     && update-ca-certificates \
     && apt-get install -y gcc g++ make autoconf dpkg-dev dpkg pkgconf xdg-utils net-tools curl wget vim nano tar man openssl openssh-server gettext bzip2 tar libtool
 
-# Install apache2
-RUN apt install -y apache2
-
-# Install php
-RUN add-apt-repository ppa:ondrej/php
-RUN apt update
+# Add php repo
+RUN add-apt-repository ppa:ondrej/php && apt update
 
 # Install php 7.1
 RUN apt install -y php7.1-common php7.1-intl php7.1-cli php7.1-fpm php7.1-dev php7.1-pdo php7.1-pdo-mysql php7.1-mysql \
@@ -73,15 +67,14 @@ RUN apt install -y php8.1-common php8.1-intl php8.1-cli php8.1-fpm php8.1-dev ph
     php8.1-soap php8.1-iconv php8.1-ssh2
 COPY php-config/php-8.1.ini /etc/php/8.1/fpm/php.ini
 
-# Configure apache2 & enable php7.4
+# Install apache2
+RUN apt install -y apache2
 COPY apache2.conf /etc/apache2/apache2.conf
 RUN a2enmod proxy_fcgi setenvif rewrite
 
 # Composer
 RUN curl https://getcomposer.org/download/2.2.5/composer.phar --output /usr/bin/composer
-RUN chown www-data /usr/bin/composer
-RUN chown -R www-data /usr/bin
-RUN chmod -R 0777 /usr/bin/composer
+RUN chown www-data /usr/bin/composer && chown -R www-data /usr/bin/composer && chmod -R 0777 /usr/bin/composer
 
 # Install cron
 RUN apt-get update && apt-get -y install -qq --force-yes cron
