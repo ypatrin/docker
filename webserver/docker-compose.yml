@@ -19,6 +19,8 @@ services:
     container_name: mysql8
     ports:
       - "3306:3306"
+    volumes:
+      - ./mysql8:/var/lib/mysql:rw
     environment:
       - TZ=UTC
       - MYSQL_PORT=3306
@@ -28,6 +30,13 @@ services:
       - DEBIAN_FRONTEND=noninteractive
     hostname:
       mysql.db
+    networks:
+      - webserver
+  redis:
+    image: redis
+    container_name: redis
+    hostname:
+      redis.db
     networks:
       - webserver
 
