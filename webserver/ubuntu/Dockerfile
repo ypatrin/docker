@@ -22,7 +22,7 @@ ENV LANGUAGE en_US.utf8
 ENV LC_ALL en_US.utf8
 
 # UNMINIMIZE
-#RUN yes | unminimize
+RUN yes | unminimize
 
 RUN apt-get update && apt-get install -y ubuntu-server landscape-common\
     && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
@@ -80,6 +80,9 @@ RUN chmod -R 0777 /usr/bin/composer
 
 # Install cron
 RUN apt-get update && apt-get -y install -qq --force-yes cron
+
+# Install mysql-client
+RUN apt install -y mysql-client
 
 # Mount dirs
 VOLUME [ "/var/www" ]
