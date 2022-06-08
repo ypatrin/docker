@@ -1,0 +1,36 @@
+version: '3.2'
+
+services:
+  ubuntu:
+    build: ubuntu
+    container_name: ubuntu
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/www:/var/www
+      - ./ubuntu/sites-config:/etc/apache2/docker-sites-config
+    hostname: webserver.loc
+    networks:
+      - webserver
+  mysql8:
+    image: ubuntu/mysql:8.0-22.04_beta
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    container_name: mysql8
+    ports:
+      - "3306:3306"
+    environment:
+      - TZ=UTC
+      - MYSQL_PORT=3306
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_ROOT_PASSWORD=root
+      - DEBIAN_FRONTEND=noninteractive
+    hostname:
+      mysql.db
+    networks:
+      - webserver
+
+networks:
+  webserver:
+    driver: bridge
