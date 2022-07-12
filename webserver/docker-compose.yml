@@ -11,6 +11,8 @@ services:
       - /var/www:/var/www
       - ./ubuntu/sites-config:/etc/apache2/docker-sites-config
     hostname: webserver.loc
+    environment:
+      - TZ=UTC
     networks:
       - webserver
   mysql8:
@@ -37,6 +39,23 @@ services:
     container_name: redis
     hostname:
       redis.db
+    networks:
+      - webserver
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse
+    ports:
+      - 8123:8123
+      - 9000:9000
+    volumes:
+      - ./clickhouse:/var/lib/clickhouse/:rw
+    environment:
+      - TZ=UTC
+      - CLICKHOUSE_USER=clickhouse
+      - CLICKHOUSE_PASSWORD=clickhouse
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    hostname:
+      clickhouse.db
     networks:
       - webserver
 

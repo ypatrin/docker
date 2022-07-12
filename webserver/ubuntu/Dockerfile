@@ -1,29 +1,26 @@
 FROM ubuntu:21.10
 #FROM --platform=linux/x86_64 ubuntu:22.04
 
-ENV LC_ALL C
-ENV TZ UTC
-ENV DEBIAN_FRONTEND noninteractive
+ENV LANG=en_US.utf8
+ENV LANGUAGE=en_US.utf8
+ENV LC_ALL=en_US.utf8
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list \
     && apt-get update \
     && apt-get install -y tzdata locales \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    && dpkg-reconfigure tzdata \
+    && dpkg-reconfigure -f noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/* \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && echo 'LANG="en_US.UTF-8"'>/etc/default/locale \
-    && dpkg-reconfigure locales \
+    && dpkg-reconfigure -f noninteractive locales \
     && update-locale LANG=en_US.UTF-8
-
-ENV LANG en_US.utf8
-ENV LANGUAGE en_US.utf8
-ENV LC_ALL en_US.utf8
 
 RUN yes | unminimize
 
-RUN apt-get update && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 \
+RUN apt-get update && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 less \
     && apt-get -y upgrade \
     && apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common sudo \
     && update-ca-certificates \
@@ -31,6 +28,13 @@ RUN apt-get update && apt-get install -y apt-utils apt-doc aptitude synaptic waj
 
 # Add php repo
 RUN add-apt-repository ppa:ondrej/php && apt update
+
+# Install php 7.0
+RUN apt install -y php7.0-common php7.0-intl php7.0-cli php7.0-fpm php7.0-dev php7.0-pdo php7.0-pdo-mysql php7.0-mysql \
+    php7.0-mysqli php7.0-curl php7.0-xml php7.0-xsl php7.0-xmlrpc php7.0-simplexml php7.0-yaml php7.0-xmlwriter \
+    php7.0-xmlreader php7.0-ctype php7.0-zip php7.0-mbstring php7.0-gd php7.0-memcached php7.0-sockets \
+    php7.0-soap php7.0-iconv php7.0-ssh2 
+#COPY php-config/php-7.0.ini /etc/php/7.0/fpm/php.ini
 
 # Install php 7.1
 RUN apt install -y php7.1-common php7.1-intl php7.1-cli php7.1-fpm php7.1-dev php7.1-pdo php7.1-pdo-mysql php7.1-mysql \
@@ -66,6 +70,9 @@ RUN apt install -y php8.1-common php8.1-intl php8.1-cli php8.1-fpm php8.1-dev ph
     php8.1-xmlreader php8.1-ctype php8.1-zip php8.1-mbstring php8.1-gd php8.1-memcached php8.1-sockets \
     php8.1-soap php8.1-iconv php8.1-ssh2
 COPY php-config/php-8.1.ini /etc/php/8.1/fpm/php.ini
+
+#install memcached
+RUN apt install -y memcached
 
 # Install apache2
 RUN apt install -y apache2
