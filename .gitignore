@@ -1,3 +1,4 @@
 .idea
 webserver/mysql8/*
 webserver/clickhouse/*
+.DS_Store
