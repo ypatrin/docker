@@ -1,6 +1,7 @@
 #!/bin/sh
 
 /usr/sbin/service cron start
+/usr/sbin/service php7.0-fpm start
 /usr/sbin/service php7.1-fpm start
 /usr/sbin/service php7.2-fpm start
 /usr/sbin/service php7.3-fpm start

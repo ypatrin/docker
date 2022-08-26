@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 #FROM --platform=linux/x86_64 ubuntu:22.04
 
 ENV LANG=en_US.utf8
@@ -18,8 +18,6 @@ RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list \
     && dpkg-reconfigure -f noninteractive locales \
     && update-locale LANG=en_US.UTF-8
 
-RUN yes | unminimize
-
 RUN apt-get update && apt-get install -y apt-utils apt-doc aptitude synaptic wajig dpkg-dev gnupg gnupg2 gnupg1 less \
     && apt-get -y upgrade \
     && apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common sudo \
@@ -34,7 +32,7 @@ RUN apt install -y php7.0-common php7.0-intl php7.0-cli php7.0-fpm php7.0-dev ph
     php7.0-mysqli php7.0-curl php7.0-xml php7.0-xsl php7.0-xmlrpc php7.0-simplexml php7.0-yaml php7.0-xmlwriter \
     php7.0-xmlreader php7.0-ctype php7.0-zip php7.0-mbstring php7.0-gd php7.0-memcached php7.0-sockets \
     php7.0-soap php7.0-iconv php7.0-ssh2 
-#COPY php-config/php-7.0.ini /etc/php/7.0/fpm/php.ini
+#COPY php-config/php-7.0.ini /etc/php/7.0/fpm/php-7.0.ini
 
 # Install php 7.1
 RUN apt install -y php7.1-common php7.1-intl php7.1-cli php7.1-fpm php7.1-dev php7.1-pdo php7.1-pdo-mysql php7.1-mysql \
